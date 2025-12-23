@@ -1,0 +1,700 @@
+<!doctype html>
+<html lang="sk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Vim ťahák</title>
+  <meta name="description" content="Skvelý Vim ťahák v slovenčine – moderná HTML stránka so sekciami a rýchlou navigáciou." />
+  <style>
+    :root{
+      --bg: #0b1220;
+      --panel: rgba(255,255,255,.06);
+      --panel-2: rgba(255,255,255,.08);
+      --text: rgba(255,255,255,.92);
+      --muted: rgba(255,255,255,.70);
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 12px 30px rgba(0,0,0,.35);
+      --radius: 18px;
+      --accent: #7dd3fc;
+      --accent-2: #a78bfa;
+      --code-bg: rgba(255,255,255,.08);
+      --kbd-bg: rgba(0,0,0,.22);
+      --kbd-border: rgba(255,255,255,.16);
+      --focus: rgba(125,211,252,.35);
+      --maxw: 1100px;
+    }
+
+    /* Light mode via data-theme */
+    [data-theme="light"]{
+      --bg: #f6f7fb;
+      --panel: rgba(0,0,0,.04);
+      --panel-2: rgba(0,0,0,.06);
+      --text: rgba(0,0,0,.88);
+      --muted: rgba(0,0,0,.60);
+      --border: rgba(0,0,0,.10);
+      --shadow: 0 12px 30px rgba(0,0,0,.10);
+      --code-bg: rgba(0,0,0,.05);
+      --kbd-bg: rgba(255,255,255,.9);
+      --kbd-border: rgba(0,0,0,.16);
+      --focus: rgba(56,189,248,.25);
+    }
+
+    * { box-sizing: border-box; }
+    html, body { height: 100%; }
+    body{
+      margin: 0;
+      font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Noto Sans", Arial;
+      color: var(--text);
+      background: var(--bg); /* čisté, nerušivé pozadie */
+      line-height: 1.55;
+    }
+    
+
+    a { color: inherit; text-decoration: none; }
+    a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+    :focus-visible{ outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 12px; }
+
+    .container{
+      max-width: var(--maxw);
+      margin: 0 auto;
+      padding: 28px 18px 60px;
+    }
+
+    header{
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      backdrop-filter: blur(10px);
+      background: linear-gradient(to bottom, rgba(0,0,0,.18), transparent);
+    }
+
+    .topbar{
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.12);
+      padding: 14px 14px;
+      border-radius: var(--radius);
+      margin: 14px auto 18px;
+      box-shadow: var(--shadow);
+    }
+
+    [data-theme="light"] .topbar{
+      background: rgba(255,255,255,.7);
+    }
+
+    .topbar-row{
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      align-items: center;
+    }
+    @media (min-width: 860px){
+      .topbar-row{ grid-template-columns: 1.3fr .9fr; }
+    }
+
+    .brand{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: 240px;
+    }
+    .logo{
+      width: 44px;
+      height: 44px;
+      border-radius: 14px;
+      position: relative;
+      overflow: hidden;
+    }
+    .logo img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .logo img{
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .logo:after{
+      content:"";
+      position:absolute;
+      inset:-40%;
+      background: radial-gradient(circle at 30% 30%, rgba(255,255,255,.35), transparent 45%);
+      transform: rotate(18deg);
+    }
+    .brand h1{
+      margin: 0;
+      font-size: 18px;
+      line-height: 1.2;
+      letter-spacing: .2px;
+    }
+    .brand p{
+      margin: 2px 0 0;
+      font-size: 12px;
+      color: var(--muted);
+    }
+
+    .pill{
+      display:flex;
+      gap: 8px;
+      align-items:center;
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .btn{
+      appearance: none;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      color: var(--text);
+      padding: 10px 12px;
+      border-radius: 14px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 13px;
+      transition: transform .08s ease, background .2s ease, border-color .2s ease;
+    }
+    .btn:hover{ background: var(--panel-2); }
+    .btn:active{ transform: translateY(1px); }
+
+    .hero{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin: 8px 0 18px;
+    }
+    @media (min-width: 860px){
+      .hero{ grid-template-columns: 1.4fr .9fr; align-items: stretch; }
+    }
+
+    .card{
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: var(--radius);
+      padding: 18px 18px;
+      box-shadow: var(--shadow);
+    }
+    .card h2{
+      margin: 0 0 6px;
+      font-size: 16px;
+    }
+    .card p{
+      margin: 6px 0 0;
+      color: var(--muted);
+      font-size: 13.5px;
+    }
+
+    .toc{
+      display:flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-top: 12px;
+    }
+    .toc a{
+      display:inline-flex;
+      align-items:center;
+      gap: 8px;
+      padding: 9px 11px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+      background: rgba(0,0,0,.08);
+      font-weight: 650;
+      font-size: 13px;
+      text-decoration: none;
+    }
+    [data-theme="light"] .toc a{ background: rgba(255,255,255,.65); }
+    .toc a:hover{ background: var(--panel-2); }
+
+    .grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    @media (min-width: 860px){
+      .grid{ grid-template-columns: 1fr 1fr; }
+      .grid .tall-card{ grid-row: span 2; }
+      .grid .full-card{ grid-column: 1 / -1; }
+    }
+
+    section.card{
+      scroll-margin-top: 110px;
+    }
+
+    .section-title{
+      display:flex;
+      align-items:center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .section-title h3{
+      margin: 0;
+      font-size: 16px;
+      letter-spacing: .2px;
+    }
+    .tag{
+      font-size: 12px;
+      color: var(--muted);
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      padding: 7px 10px;
+      background: rgba(0,0,0,.08);
+      white-space: nowrap;
+    }
+    [data-theme="light"] .tag{ background: rgba(255,255,255,.65); }
+
+    ul{
+      margin: 10px 0 0;
+      padding-left: 0;
+      color: var(--text);
+      list-style: none;
+    }
+    li{ margin: 6px 0; }
+    .muted{ color: var(--muted); }
+
+    code{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.92em;
+      background: var(--code-bg);
+      border: 1px solid var(--border);
+      padding: 2px 7px;
+      border-radius: 9px;
+      white-space: nowrap;
+    }
+
+    kbd{
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      font-size: 0.9em;
+      background: var(--kbd-bg);
+      border: 1px solid var(--kbd-border);
+      padding: 2px 8px;
+      border-radius: 8px;
+      box-shadow: 0 2px 0 rgba(0,0,0,.15);
+      white-space: nowrap;
+    }
+
+    .group{
+      margin-top: 12px;
+      padding-top: 10px;
+      border-top: 1px dashed var(--border);
+    }
+    .group h4{
+      margin: 0 0 6px;
+      font-size: 13px;
+      color: var(--muted);
+      font-weight: 800;
+      letter-spacing: .2px;
+      text-transform: uppercase;
+    }
+
+    .footer{
+      margin-top: 20px;
+      padding: 16px 18px;
+      border: 1px solid var(--border);
+      background: var(--panel);
+      border-radius: var(--radius);
+      color: var(--muted);
+      font-size: 12.5px;
+    }
+
+    /* ===== Compact PRINT version ===== */
+@media print {
+
+  /* skryť UI */
+  header,
+  .toc,
+  .pill,
+  .hero {
+    display: none !important;
+  }
+
+  body {
+    background: #fff !important;
+    color: #000 !important;
+    font-size: 11px;
+    line-height: 1.4;
+  }
+
+  .container {
+    max-width: 100%;
+    padding: 0;
+  }
+
+  .grid {
+    grid-template-columns: 1fr 1fr; /* 2 stĺpce */
+    gap: 8px;
+  }
+  .grid .tall-card{ grid-row: span 2; }
+  .grid .full-card{ grid-column: 1 / -1; }
+  #koniec{ page-break-before: always; }
+
+  .card {
+    box-shadow: none;
+    border: 1px solid #ccc;
+    padding: 8px 10px;
+    border-radius: 6px;
+    page-break-inside: avoid;
+  }
+
+  h2, h3 {
+    font-size: 13px;
+    margin: 0 0 4px;
+  }
+
+  ul {
+    margin: 4px 0 0;
+    padding-left: 0;
+  }
+
+  li {
+    margin: 2px 0;
+  }
+
+  code, kbd {
+    background: #f2f2f2;
+    border: 1px solid #ddd;
+    font-size: 10px;
+  }
+
+  .footer {
+    display: none;
+  }
+}
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="container">
+      <div class="topbar">
+        <div class="topbar-row">
+          <div class="brand">
+            <div class="logo" aria-hidden="true">
+              <img src="Vimlogo.svg" alt="">
+            </div>
+            <div>
+              <h1>Vim ťahák</h1>
+            </div>
+          </div>
+
+          <div class="pill">
+            <button class="btn" id="themeBtn" type="button" title="Prepínať svetlý/tmavý režim">🌓 Režim</button>
+            <button class="btn" id="printBtn" type="button" title="Tlač / PDF">🖨️ PDF</button>
+          </div>
+        </div>
+
+        <nav class="toc" aria-label="Rýchla navigácia">
+          <a href="#pohyb">🧭 Pohyb</a>
+          <a href="#edit">✍️ Editácia</a>
+          <a href="#vizual">🖱️ Vizuálny režim</a>
+          <a href="#kopirovanie">📋 Copy/Paste</a>
+          <a href="#koniec">🚪 Ukončenie</a>
+          <a href="#hladanie">🔁 Hľadať/Nahradiť</a>
+          <a href="#subory">🗂️ Viac súborov</a>
+          <a href="#znacky">📍 Značky</a>
+          <a href="#vseobecne">⚙️ Všeobecné</a>
+          <a href="#vimrc">🧩 Vimrc</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <div class="hero">
+      <div class="card">
+        <h2>Vim ťahák</h2>
+        <p>
+          Zoznam <b>základných príkazov</b>, ktoré dávajú najväčší efekt v praxi.
+          Ideálne ako „quick reference“ pri učení aj pri návrate k Vim-u po čase.
+        </p>
+        <p>
+          Pre tlač použi rozloženie 2 stránok na jednu A4.
+        </p>
+        <div class="group">
+          <h4>Tip</h4>
+          <p class="muted">
+            Väčšina príkazov funguje v <b>normálnom režime</b>. Do normálneho režimu sa vždy vrátiš cez <kbd>Esc</kbd>.
+          </p>
+        </div>
+      </div>
+
+      <aside class="card">
+        <h2>Mini legenda</h2>
+        <ul>
+          <li><code>[znak]</code> = konkrétny znak, ktorý zadáš</li>
+          <li><code>[pohyb]</code> = pohybový príkaz (napr. <code>w</code>, <code>$</code>, <code>e</code>)</li>
+          <li><kbd>Ctrl</kbd> + <kbd>u</kbd> znamená stlačiť Ctrl a u naraz</li>
+        </ul>
+      </aside>
+    </div>
+
+    <div class="grid">
+      <section id="pohyb" class="card">
+        <div class="section-title">
+          <h3>🧭 Pohyb kurzora (normálny režim)</h3>
+          <span class="tag">navigácia</span>
+        </div>
+
+        <ul>
+          <li><code>w</code> – skok na začiatok ďalšieho slova (interpunkcia sa ráta)</li>
+          <li><code>W</code> – skok na ďalšie slovo (oddelené medzerami)</li>
+          <li><code>e</code> – skok na koniec slova (interpunkcia sa ráta)</li>
+          <li><code>E</code> – skok na koniec slova (bez interpunkcie)</li>
+          <li><code>b</code> – skok dozadu o slovo (interpunkcia sa ráta)</li>
+          <li><code>B</code> – skok dozadu o slovo (bez interpunkcie)</li>
+          <li><code>0</code> – začiatok riadku</li>
+          <li><code>^</code> – prvý neprázdny znak na riadku</li>
+          <li><code>$</code> – koniec riadku</li>
+        </ul>
+
+        <div class="group">
+          <h4>Pokročilé</h4>
+          <ul>
+            <li><kbd>Ctrl</kbd>+<kbd>d</kbd> – dole o pol obrazovky</li>
+            <li><kbd>Ctrl</kbd>+<kbd>u</kbd> – hore o pol obrazovky</li>
+            <li><code>}</code> / <code>{</code> – dopredu/dozadu po odsekoch (prázdne riadky)</li>
+            <li><code>gg</code> – začiatok súboru</li>
+            <li><code>G</code> – koniec súboru</li>
+            <li><code>:[číslo]</code> + <kbd>Enter</kbd> – skok na riadok</li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h4>Hľadanie v riadku</h4>
+          <ul>
+            <li><code>f [znak]</code> / <code>F [znak]</code> – ďalší výskyt znaku za/pred kurzorom</li>
+            <li><code>t [znak]</code> / <code>T [znak]</code> – tesne pred výskyt znaku za/pred kurzorom</li>
+            <li><code>;</code> – ďalší výskyt, <code>,</code> – predchádzajúci</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="edit" class="card">
+        <div class="section-title">
+          <h3>✍️ Vkladanie a úprava textu</h3>
+          <span class="tag">insert / change / delete</span>
+        </div>
+
+        <ul>
+          <li><code>i</code> – vkladanie na kurzore</li>
+          <li><code>I</code> – vkladanie na začiatku riadku</li>
+          <li><code>a</code> – vkladanie za kurzorom</li>
+          <li><code>A</code> – vkladanie na konci riadku</li>
+          <li><code>o</code> – nový riadok pod aktuálnym</li>
+          <li><code>O</code> – nový riadok nad aktuálnym</li>
+          <li><code>cc</code> – nahradiť celý riadok</li>
+          <li><code>c [pohyb]</code> – nahradiť od kurzora po cieľ pohybu (napr. <code>ce</code>)</li>
+          <li><kbd>Esc</kbd> – návrat do normálneho režimu</li>
+          <li><code>r [znak]</code> – nahradí jeden znak (bez insert módu)</li>
+        </ul>
+
+        <div class="group">
+          <h4>Mazanie</h4>
+          <ul>
+            <li><code>d [pohyb]</code> – zmaže od kurzora po cieľ (napr. <code>de</code>)</li>
+            <li><code>dd</code> – zmaže celý riadok</li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h4>Pokročilé</h4>
+          <ul>
+            <li><code>J</code> – spojí nasledujúci riadok s aktuálnym</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="vizual" class="card">
+        <div class="section-title">
+          <h3>🖱️ Vizuálny režim</h3>
+          <span class="tag">select</span>
+        </div>
+
+        <ul>
+          <li><code>v</code> – vizuálny režim (znakový)</li>
+          <li><code>V</code> – vizuálny režim po riadkoch</li>
+          <li><kbd>Ctrl</kbd>+<kbd>v</kbd> – blokový vizuálny režim</li>
+          <li><kbd>Esc</kbd> – ukončiť vizuálny režim</li>
+        </ul>
+
+        <div class="group">
+          <h4>Akcie na označený text</h4>
+          <ul>
+            <li><code>y</code> – skopíruje (yank)</li>
+            <li><code>d</code> – zmaže</li>
+            <li><code>c</code> – zmaže a prepne do insert módu</li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h4>Pokročilé</h4>
+          <ul>
+            <li><code>o</code> – presun na druhý koniec označenia</li>
+            <li><code>O</code> – presun na opačný roh bloku</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="kopirovanie" class="card">
+        <div class="section-title">
+          <h3>📋 Kopírovanie a vkladanie</h3>
+          <span class="tag">clipboard</span>
+        </div>
+
+        <ul>
+          <li><code>yy</code> – skopíruje celý riadok</li>
+          <li><code>p</code> – vloží za kurzor</li>
+          <li><code>P</code> – vloží pred kurzor</li>
+          <li><code>dd</code> – vystrihne riadok (delete/cut)</li>
+          <li><code>x</code> – vymaže znak pod kurzorom</li>
+          <li><code>X</code> – vymaže znak pred kurzorom</li>
+        </ul>
+      </section>
+
+      <section id="koniec" class="card">
+        <div class="section-title">
+          <h3>🚪 Uloženie a ukončenie</h3>
+          <span class="tag">quit</span>
+        </div>
+
+        <ul>
+          <li><code>:w</code> – uložiť súbor</li>
+          <li><code>:wq</code> – uložiť a skončiť</li>
+          <li><code>:q</code> – skončiť (ak neboli zmeny)</li>
+          <li><code>:q!</code> – skončiť bez uloženia</li>
+        </ul>
+      </section>
+
+      <section id="hladanie" class="card">
+        <div class="section-title">
+          <h3>🔁 Hľadanie a nahrádzanie</h3>
+          <span class="tag">search/replace</span>
+        </div>
+
+        <ul>
+          <li><code>/pattern</code> – hľadanie dopredu</li>
+          <li><code>?pattern</code> – hľadanie dozadu</li>
+          <li><code>n</code> – ďalší výskyt rovnakým smerom</li>
+          <li><code>N</code> – ďalší výskyt opačným smerom</li>
+          <li><code>:%s/staré/nové/g</code> – nahradí všetky výskyty v súbore</li>
+          <li><code>:%s/staré/nové/gc</code> – nahradí všetky výskyty s potvrdením</li>
+        </ul>
+      </section>
+
+      <section id="subory" class="card tall-card">
+        <div class="section-title">
+          <h3>🗂️ Viac súborov a okná</h3>
+          <span class="tag">tabs/splits</span>
+        </div>
+
+        <ul>
+          <li><code>:e súbor</code> – otvorí súbor</li>
+          <li><code>:tabe</code> – nový tab</li>
+          <li><code>gt</code> – ďalší tab</li>
+          <li><code>gT</code> – predchádzajúci tab</li>
+        </ul>
+
+        <div class="group">
+          <h4>Pokročilé (splity)</h4>
+          <ul>
+            <li><code>:vsp</code> – vertikálne rozdelenie okna</li>
+            <li><kbd>Ctrl</kbd>+<kbd>w</kbd>, <kbd>s</kbd> – horizontálne rozdelenie</li>
+            <li><kbd>Ctrl</kbd>+<kbd>w</kbd>, <kbd>v</kbd> – vertikálne rozdelenie</li>
+            <li><kbd>Ctrl</kbd>+<kbd>w</kbd>, <kbd>w</kbd> – prepínať medzi oknami</li>
+            <li><kbd>Ctrl</kbd>+<kbd>w</kbd>, <kbd>q</kbd> – zatvoriť okno</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="znacky" class="card">
+        <div class="section-title">
+          <h3>📍 Značky (Marks)</h3>
+          <span class="tag">jump points</span>
+        </div>
+
+        <ul>
+          <li><code>m{a-z}</code> – nastaví značku na pozícii kurzora</li>
+          <li><code>m{A-Z}</code> – globálna značka (funguje medzi súbormi)</li>
+          <li><code>'{a-z}</code> – skok na riadok so značkou</li>
+          <li><code>''</code> – návrat na predchádzajúcu pozíciu</li>
+        </ul>
+      </section>
+
+      <section id="vseobecne" class="card">
+        <div class="section-title">
+          <h3>⚙️ Všeobecné</h3>
+          <span class="tag">core</span>
+        </div>
+
+        <ul>
+          <li><code>u</code> – späť (undo)</li>
+          <li><kbd>Ctrl</kbd>+<kbd>r</kbd> – znovu (redo)</li>
+          <li><code>.</code> – zopakuje posledný príkaz</li>
+        </ul>
+      </section>
+
+      <section id="vimrc" class="card full-card">
+        <div class="section-title">
+          <h3>🧩 Ako spraviť Vim použiteľným (.vimrc)</h3>
+          <span class="tag">setup</span>
+        </div>
+
+        <p class="muted">
+          Vim je v základe dosť nepríjemný (napr. stále písať <code>:w</code>, riešiť schránku).
+          Pár úprav v <code>.vimrc</code> to vie zásadne zlepšiť.
+        </p>
+
+        <div class="group">
+          <h4>Inštalácia (rýchlo)</h4>
+          <ul>
+            <li>Skopíruj <code>.vimrc</code> do domovského adresára a reštartuj Vim</li>
+            <li>macOS tip: <code>cd ~</code> → <code>nano .vimrc</code> → vlož obsah → <kbd>Ctrl</kbd>+<kbd>X</kbd>, <kbd>Y</kbd>, <kbd>Enter</kbd></li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h4>Schránka (clipboard)</h4>
+          <ul>
+            <li>Skontroluj <code>vim --version</code> a hľadaj <code>+clipboard</code></li>
+            <li>Ak je tam <code>-clipboard</code>, systémová schránka nebude fungovať</li>
+            <li>Na macOS typicky pomôže Vim z Homebrew (s podporou clipboardu)</li>
+          </ul>
+        </div>
+
+        <div class="group">
+          <h4>Ergonómia</h4>
+          <ul>
+            <li>Prehoď <kbd>Caps Lock</kbd> a <kbd>Esc</kbd> – Escape budeš používať stále</li>
+            <li><code>:wqa</code> – uložiť a zavrieť všetky taby</li>
+          </ul>
+        </div>
+      </section>
+    </div>
+
+  </main>
+
+  <script>
+    // Theme handling (persist)
+    const root = document.documentElement;
+    const themeBtn = document.getElementById('themeBtn');
+    const printBtn = document.getElementById('printBtn');
+
+    function setTheme(t){
+      if(t === 'light') root.setAttribute('data-theme', 'light');
+      else root.removeAttribute('data-theme');
+      localStorage.setItem('vimCheatTheme', t);
+    }
+
+    const savedTheme = localStorage.getItem('vimCheatTheme');
+    if(savedTheme) setTheme(savedTheme);
+
+    themeBtn.addEventListener('click', () => {
+      const isLight = root.getAttribute('data-theme') === 'light';
+      setTheme(isLight ? 'dark' : 'light');
+    });
+
+    printBtn.addEventListener('click', () => window.print());
+  </script>
+</body>
+</html>
