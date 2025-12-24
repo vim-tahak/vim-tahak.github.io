@@ -61,6 +61,7 @@
 
     a { color: inherit; text-decoration: none; }
     a:hover { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; }
+    .brand:hover{ text-decoration: none; }
     :focus-visible{ outline: 3px solid var(--focus); outline-offset: 2px; border-radius: 12px; }
 
     .container{
@@ -396,14 +397,14 @@
     <div class="container">
       <div class="topbar">
         <div class="topbar-row">
-          <div class="brand">
+          <a class="brand" href="#top" aria-label="Späť na začiatok">
             <div class="logo" aria-hidden="true">
               <img src="Vimlogo.svg" alt="">
             </div>
             <div>
               <h1>Vim ťahák</h1>
             </div>
-          </div>
+          </a>
 
           <div class="pill">
             <button class="btn" id="themeBtn" type="button" title="Prepínať svetlý/tmavý režim">🌓 Režim</button>
