@@ -355,7 +355,11 @@
   }
   .grid .tall-card{ grid-row: span 2; }
   .grid .full-card{ grid-column: 1 / -1; }
-  #koniec{ page-break-before: always; }
+  #koniec{ 
+    page-break-before: always; 
+    -webkit-column-break-before: always;
+    -webkit-region-break-before: always;
+  }
 
   .card {
     box-shadow: none;
@@ -422,7 +426,6 @@
           <a href="#subory">🗂️ Viac súborov</a>
           <a href="#znacky">📍 Značky</a>
           <a href="#vseobecne">⚙️ Všeobecné</a>
-          <a href="#vimrc">🧩 Vimrc</a>
         </nav>
       </div>
     </div>
@@ -471,6 +474,7 @@
           <li><code>E</code> – skok na koniec slova (bez interpunkcie)</li>
           <li><code>b</code> – skok dozadu o slovo (interpunkcia sa ráta)</li>
           <li><code>B</code> – skok dozadu o slovo (bez interpunkcie)</li>
+          <li><code>ge</code> / <code>gE</code> – dozadu na koniec slova (s/bez interpunkcie)</li>
           <li><code>0</code> – začiatok riadku</li>
           <li><code>^</code> – prvý neprázdny znak na riadku</li>
           <li><code>$</code> – koniec riadku</li>
@@ -485,6 +489,9 @@
             <li><code>gg</code> – začiatok súboru</li>
             <li><code>G</code> – koniec súboru</li>
             <li><code>:[číslo]</code> + <kbd>Enter</kbd> – skok na riadok</li>
+            <li><code>%</code> – na párovú zátvorku</li>
+            <li><code>H</code>/<code>M</code>/<code>L</code> – začiatok/stred/koniec obrazovky</li>
+            <li><code>zz</code>/<code>zt</code>/<code>zb</code> – zarovnanie riadku na stred/vrch/spodok</li>
           </ul>
         </div>
 
@@ -515,6 +522,7 @@
           <li><code>c [pohyb]</code> – nahradiť od kurzora po cieľ pohybu (napr. <code>ce</code>)</li>
           <li><kbd>Esc</kbd> – návrat do normálneho režimu</li>
           <li><code>r [znak]</code> – nahradí jeden znak (bez insert módu)</li>
+          <li><code>s</code> / <code>S</code> – nahradiť znak / celý riadok (insert)</li>
         </ul>
 
         <div class="group">
@@ -530,6 +538,10 @@
           <h4>Pokročilé</h4>
           <ul>
             <li><code>J</code> – spojí nasledujúci riadok s aktuálnym</li>
+            <li><code>C</code> – nahradiť po koniec riadku</li>
+            <li><code>~</code> – invertuje veľkosť písmen</li>
+            <li><code>gu [pohyb]</code> / <code>gU [pohyb]</code> – lowercase / uppercase</li>
+            <li><code>&lt;</code> / <code>&gt;</code> – odsadenie (funguje aj vo vizuálnom)</li>
           </ul>
         </div>
       </section>
@@ -561,6 +573,8 @@
           <ul>
             <li><code>o</code> – presun na druhý koniec označenia</li>
             <li><code>O</code> – presun na opačný roh bloku</li>
+            <li><code>=</code> – auto odsadenie výberu</li>
+            <li><code>gv</code> – znovu vybrať posledný výber</li>
           </ul>
         </div>
       </section>
@@ -578,6 +592,9 @@
           <li><code>dd</code> – vystrihne riadok (delete/cut)</li>
           <li><code>x</code> – vymaže znak pod kurzorom</li>
           <li><code>X</code> – vymaže znak pred kurzorom</li>
+          <li><code>"+y</code> / <code>"+p</code> – kopíruj/vlož cez systémovú schránku</li>
+          <li><code>"_d</code> – mazať bez zapísania do registru</li>
+          <li><code>"0p</code> – vlož posledný yank (aj po mazaní)</li>
         </ul>
       </section>
 
@@ -595,6 +612,7 @@
           <li><code>:q!</code> – skončiť bez uloženia</li>
           <li><code>:x</code> – uložiť a skončiť</li>
           <li><code>ZZ</code> – uložiť a skončiť</li>
+          <li><code>:w !sudo tee %</code> – uložiť ako root (ak nemáš práva)</li>
         </ul>
       </section>
 
@@ -609,8 +627,11 @@
           <li><code>?pattern</code> – hľadanie dozadu</li>
           <li><code>n</code> – ďalší výskyt rovnakým smerom</li>
           <li><code>N</code> – ďalší výskyt opačným smerom</li>
+          <li><code>*</code> / <code>#</code> – hľadať slovo pod kurzorom dopredu/dozadu</li>
+          <li><code>gn</code> – označiť ďalší match pre editáciu</li>
           <li><code>:%s/staré/nové/g</code> – nahradí všetky výskyty v súbore</li>
           <li><code>:%s/staré/nové/gc</code> – nahradí všetky výskyty s potvrdením</li>
+          <li><code>:'&lt;,'&gt;s/staré/nové/g</code> – nahradiť len vo vybranom rozsahu</li>
         </ul>
       </section>
 
@@ -625,6 +646,7 @@
           <li><code>:tabe</code> – nový tab</li>
           <li><code>gt</code> – ďalší tab</li>
           <li><code>gT</code> – predchádzajúci tab</li>
+          <li><code>:ls</code> / <code>:b [číslo]</code> – zoznam a prepnutie bufferov</li>
         </ul>
 
         <div class="group">
@@ -635,6 +657,10 @@
             <li><kbd>Ctrl</kbd>+<kbd>w</kbd>, <kbd>v</kbd> – vertikálne rozdelenie</li>
             <li><kbd>Ctrl</kbd>+<kbd>w</kbd>, <kbd>w</kbd> – prepínať medzi oknami</li>
             <li><kbd>Ctrl</kbd>+<kbd>w</kbd>, <kbd>q</kbd> – zatvoriť okno</li>
+            <li><kbd>Ctrl</kbd>+<kbd>w</kbd>, <kbd>=</kbd> – vyrovnať veľkosti splitov</li>
+            <li><kbd>Ctrl</kbd>+<kbd>w</kbd>, <kbd>H</kbd>/<kbd>J</kbd>/<kbd>K</kbd>/<kbd>L</kbd> – presunúť split</li>
+            <li><kbd>Ctrl</kbd>+<kbd>w</kbd>, <kbd>r</kbd> – rotovať okná</li>
+            <li><code>:bd</code> – zavrieť buffer (zachová okná)</li>
           </ul>
         </div>
       </section>
@@ -649,7 +675,9 @@
           <li><code>m{a-z}</code> – nastaví značku na pozícii kurzora</li>
           <li><code>m{A-Z}</code> – globálna značka (funguje medzi súbormi)</li>
           <li><code>'{a-z}</code> – skok na riadok so značkou</li>
-          <li><code>''</code> – návrat na predchádzajúcu pozíciu</li>
+          <li><code>''</code> / <code>``</code> – návrat na predchádzajúcu pozíciu/znak</li>
+          <li><kbd>Ctrl</kbd>+<kbd>o</kbd> / <kbd>Ctrl</kbd>+<kbd>i</kbd> – späť/do histórie skokov</li>
+          <li><code>:jumps</code> / <code>:marks</code> – zoznam skokov/značiek</li>
         </ul>
       </section>
 
@@ -663,43 +691,10 @@
           <li><code>u</code> – späť (undo)</li>
           <li><kbd>Ctrl</kbd>+<kbd>r</kbd> – znovu (redo)</li>
           <li><code>.</code> – zopakuje posledný príkaz</li>
+          <li><code>q{reg} ... q</code> – nahrať makro do registra</li>
+          <li><code>@{reg}</code> / <code>@@</code> – spusti makro / posledné makro</li>
+          <li><kbd>Ctrl</kbd>+<kbd>a</kbd> / <kbd>Ctrl</kbd>+<kbd>x</kbd> – inkrement/dekrement čísla</li>
         </ul>
-      </section>
-
-      <section id="vimrc" class="card full-card">
-        <div class="section-title">
-          <h3>🧩 Ako spraviť Vim použiteľným (.vimrc)</h3>
-          <span class="tag">setup</span>
-        </div>
-
-        <p class="muted">
-          Vim je v základe dosť nepríjemný (napr. stále písať <code>:w</code>, riešiť schránku).
-          Pár úprav v <code>.vimrc</code> to vie zásadne zlepšiť.
-        </p>
-
-        <div class="group">
-          <h4>Inštalácia (rýchlo)</h4>
-          <ul>
-            <li>Skopíruj <code>.vimrc</code> do domovského adresára a reštartuj Vim</li>
-            <li>macOS tip: <code>cd ~</code> → <code>nano .vimrc</code> → vlož obsah → <kbd>Ctrl</kbd>+<kbd>X</kbd>, <kbd>Y</kbd>, <kbd>Enter</kbd></li>
-          </ul>
-        </div>
-
-        <div class="group">
-          <h4>Schránka (clipboard)</h4>
-          <ul>
-            <li>Skontroluj <code>vim --version</code> a hľadaj <code>+clipboard</code></li>
-            <li>Ak je tam <code>-clipboard</code>, systémová schránka nebude fungovať</li>
-            <li>Na macOS typicky pomôže Vim z Homebrew (s podporou clipboardu)</li>
-          </ul>
-        </div>
-
-        <div class="group">
-          <h4>Ergonómia</h4>
-          <ul>
-            <li>Prehoď <kbd>Caps Lock</kbd> a <kbd>Esc</kbd> – Escape budeš používať stále</li>            
-          </ul>
-        </div>
       </section>
     </div>
 
