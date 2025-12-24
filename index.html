@@ -707,13 +707,14 @@
     const themeBtn = document.getElementById('themeBtn');
     const printBtn = document.getElementById('printBtn');
 
+    const THEME_KEY = 'vimTheme';
     function setTheme(t){
       if(t === 'light') root.setAttribute('data-theme', 'light');
       else root.removeAttribute('data-theme');
-      localStorage.setItem('vimCheatTheme', t);
+      localStorage.setItem(THEME_KEY, t);
     }
 
-    const savedTheme = localStorage.getItem('vimCheatTheme');
+    const savedTheme = localStorage.getItem(THEME_KEY);
     if(savedTheme) setTheme(savedTheme);
 
     themeBtn.addEventListener('click', () => {
