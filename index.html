@@ -55,6 +55,7 @@
       color: var(--text);
       background: var(--bg); /* čisté, nerušivé pozadie */
       line-height: 1.55;
+      padding-top: 120px; /* pri fixed headeri nech obsah nezačne pod ním */
     }
     
 
@@ -65,12 +66,14 @@
     .container{
       max-width: var(--maxw);
       margin: 0 auto;
-      padding: 28px 18px 60px;
+      padding: 28px 18px;
     }
 
     header{
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
       z-index: 50;
       backdrop-filter: blur(10px);
       background: linear-gradient(to bottom, rgba(0,0,0,.18), transparent);
@@ -169,7 +172,7 @@
       display:grid;
       grid-template-columns: 1fr;
       gap: 14px;
-      margin: 8px 0 18px;
+      margin: 118px 0 18px;
     }
     @media (min-width: 860px){
       .hero{ grid-template-columns: 1.4fr .9fr; align-items: stretch; }
@@ -226,7 +229,7 @@
     }
 
     section.card{
-      scroll-margin-top: 110px;
+      scroll-margin-top: 265px; /* väčší offset, aby nadpis sekcie ostal viditeľný pod fixným headerom */
     }
 
     .section-title{
@@ -340,6 +343,9 @@
   .container {
     max-width: 100%;
     padding: 0;
+  }
+  body{
+    padding-top: 0;
   }
 
   .grid {
